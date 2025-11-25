@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
+const generateToken = require("../utils/generateJWT");
+const { last } = require("lodash");
 
 exports.signup = asyncHandler(async (req, res, next) => {
   req.body.password = await bcrypt.hash(req.body.password, 12);
@@ -8,6 +10,10 @@ exports.signup = asyncHandler(async (req, res, next) => {
   console.log(req.body);
   const newUser = new User({ fName, lName, email, password });
   await newUser.save();
+  const token = await generateToken(
+    { id: newUser._id, fName, lName, email },
+    res
+  );
   res.status(201).json({
     message: "User registered successfully",
     user: {
@@ -15,6 +21,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
       fName: newUser.fName,
       lName: newUser.lName,
       email: newUser.email,
+      token,
     },
   });
 });

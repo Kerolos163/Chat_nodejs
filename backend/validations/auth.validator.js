@@ -23,10 +23,10 @@ exports.signupValidation = [
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Email must be a valid email address")
-    .custom((value, { req }) => {
-      const existingUser = User.findOne({ email: value });
+    .custom(async (value, { req }) => {
+      const existingUser = await User.findOne({ email: value });
       if (existingUser) {
-        throw new ApiError("Email already in use", 400);
+        throw new ApiError("Email already exists", 400);
       }
 
       return true;
