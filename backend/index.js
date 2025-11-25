@@ -1,16 +1,28 @@
 const express = require("express");
-const app = express();
+const appError = require("./middlewares/error");
+const db = require("./config/db");
 require("dotenv").config();
 
+//#region App Initialization
+const app = express();
 const PORT = process.env.Port || 5000;
+//#endregion
 
 //#region Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 //#endregion
 
 //#region Routes
 app.use("/api/auth", require("./routes/auth.route"));
 //#endregion
 
+//#region Error Handling
+app.use(appError.notFoundRoute);
+app.use(appError.errorHandler);
+//#endregion
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  db();
+  console.log(`Server is running on port ${PORT} ⛹️`);
 });
