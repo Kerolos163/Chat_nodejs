@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const generateToken = require("../utils/generateJWT");
-const { last } = require("lodash");
 
 exports.signup = asyncHandler(async (req, res, next) => {
   req.body.password = await bcrypt.hash(req.body.password, 12);
