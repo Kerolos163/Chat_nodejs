@@ -1,6 +1,7 @@
 const express = require("express");
 const appError = require("./middlewares/error");
 const db = require("./config/db");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 //#region App Initialization
@@ -11,6 +12,7 @@ const PORT = process.env.Port || 5000;
 //#region Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 //#endregion
 
 //#region Routes

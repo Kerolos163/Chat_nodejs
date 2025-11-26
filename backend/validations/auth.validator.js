@@ -38,3 +38,26 @@ exports.signupValidation = [
     .withMessage("Password must be at least 6 characters long"),
   validatorMiddleware,
 ];
+
+exports.loginValidation = [
+  check("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Email must be a valid email address")
+    .custom(async (value, { req }) => {
+      const existingUser = await User.findOne({ email: value });
+      if (!existingUser) {
+        throw new ApiError("Invalid email or password", 400);
+      }
+
+      req.currentUser = existingUser;
+      return true;
+    }),
+  check("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+  validatorMiddleware,
+];

@@ -3,20 +3,20 @@ const AppError = require("../utils/apiError");
 const httpStatus = require("../utils/http_status");
 
 const VerifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization || "";
+  const token = req.cookies.jwt;
 
-  if (!authHeader) {
+  if (!token) {
     const err = new AppError("No token provided", 404, httpStatus.fail);
     return next(err);
   }
-  const token = authHeader.split(" ")[1];
 
   try {
-    const CurrentUser = jwt.verify(token, process.env.JWT_SECRET);
-    req.currentUser = CurrentUser;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    req.currentUser = decoded;
     next();
   } catch (error) {
-    const err = new AppError("Invalid token", 404, httpStatus.fail);
+    const err = new AppError("Invalid token", 401, httpStatus.fail);
     return next(err);
   }
 };
