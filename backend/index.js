@@ -17,6 +17,7 @@ app.use(cookieParser());
 
 //#region Routes
 app.use("/api/auth", require("./routes/auth.route"));
+app.use("/api/message", require("./routes/message.route"));
 //#endregion
 
 //#region Error Handling
