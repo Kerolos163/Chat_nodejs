@@ -46,9 +46,9 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="grid lg:grid-cols-2">
+    <div className="h-screen grid lg:grid-cols-2">
       {/* left side */}
-      <div className="flex flex-col justify-items-start items-center p-4 sm:p-12">
+      <div className="flex flex-col justify-center items-center pt-6 mt-8 sm:p-1">
         <div className="w-full max-w-md space-y-2">
           {/* LOGO */}
           <div className="text-center mb-4">
@@ -175,9 +175,9 @@ const SignUpPage = () => {
           </form>
 
           <div className="text-center">
-            <p>
+            <p className="text-base-content/60">
               Already have an account?{" "}
-              <Link to="/login" className="Link link-primary">
+              <Link to="/login" className="link link-primary">
                 {" "}
                 Sign In
               </Link>
