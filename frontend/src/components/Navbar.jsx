@@ -1,10 +1,9 @@
-import React from "react";
 import { useAuthStore } from "../store/useStoreAuth";
 
 const Navbar = () => {
-  const { authUser } = useAuthStore();
+  const { authUser, logout } = useAuthStore();
 
-  return <div>Navbar</div>;
+  return <header>Navbar</header>;
 };
 
 export default Navbar;
