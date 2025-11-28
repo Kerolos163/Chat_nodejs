@@ -29,7 +29,7 @@ const App = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
 
       <Routes>
         <Route
@@ -47,7 +47,7 @@ const App = () => {
         <Route path="/setting" element={<SettingPage />} />
         <Route
           path="/profile"
-          element={isCheckingAuth ? <ProfilePage /> : <Navigate to="/login" />}
+          element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
 

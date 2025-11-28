@@ -12,7 +12,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   const newUser = new User({ fName, lName, email, password });
   await newUser.save();
   const token = await generateToken(
-    { id: newUser._id, fName, lName, email },
+    { id: newUser._id, fName, lName, email, avatar: newUser.avatar },
     res
   );
   res.status(201).json({
@@ -23,6 +23,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
       lName: newUser.lName,
       email: newUser.email,
       token,
+      avatar: newUser.avatar,
     },
   });
 });
@@ -44,6 +45,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       fName: req.currentUser.fName,
       lName: req.currentUser.lName,
       email: req.currentUser.email,
+      avatar: req.currentUser.avatar,
     },
     res
   );
@@ -56,6 +58,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       lName: req.currentUser.lName,
       email: req.currentUser.email,
       token,
+      avatar: req.currentUser.avatar,
     },
   });
 });
@@ -71,7 +74,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
 exports.updateProfile = asyncHandler(async (req, res, next) => {
   const { avatar } = req.body;
-  const userId = req.currentUser._id;
+  const userId = req.currentUser.id;
   if (!avatar) {
     const err = new ApiError("Avatar is required", 400);
     return next(err);
@@ -104,6 +107,7 @@ exports.checkAuth = asyncHandler(async (req, res, next) => {
       fName: req.currentUser.fName,
       lName: req.currentUser.lName,
       email: req.currentUser.email,
+      avatar: req.currentUser.avatar,
     },
   });
 });
