@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 const generateToken = require("../utils/generateJWT");
 const ApiError = require("../utils/apiError");
 const cloudinary = require("../utils/cloudinary");
+const { create } = require("lodash");
 
 exports.signup = asyncHandler(async (req, res, next) => {
   req.body.password = await bcrypt.hash(req.body.password, 12);
@@ -12,7 +13,14 @@ exports.signup = asyncHandler(async (req, res, next) => {
   const newUser = new User({ fName, lName, email, password });
   await newUser.save();
   const token = await generateToken(
-    { id: newUser._id, fName, lName, email, avatar: newUser.avatar },
+    {
+      id: newUser._id,
+      fName,
+      lName,
+      email,
+      avatar: newUser.avatar,
+      createdAt: newUser.createdAt,
+    },
     res
   );
   res.status(201).json({
@@ -46,6 +54,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       lName: req.currentUser.lName,
       email: req.currentUser.email,
       avatar: req.currentUser.avatar,
+      createdAt: req.currentUser.createdAt,
     },
     res
   );
@@ -59,6 +68,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       email: req.currentUser.email,
       token,
       avatar: req.currentUser.avatar,
+      createdAt: req.currentUser.createdAt,
     },
   });
 });
@@ -95,11 +105,18 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
       lName: updatedUser.lName,
       email: updatedUser.email,
       avatar: updatedUser.avatar,
+      createdAt: updatedUser.createdAt,
     },
   });
 });
 
 exports.checkAuth = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.currentUser.id);
+  if (!user) {
+    const err = new ApiError("User not found", 404);
+    return next(err);
+  }
+
   res.status(200).json({
     message: "User authenticated successfully",
     user: {
@@ -107,7 +124,8 @@ exports.checkAuth = asyncHandler(async (req, res, next) => {
       fName: req.currentUser.fName,
       lName: req.currentUser.lName,
       email: req.currentUser.email,
-      avatar: req.currentUser.avatar,
+      avatar: user.avatar,
+      createdAt: req.currentUser.createdAt,
     },
   });
 });
