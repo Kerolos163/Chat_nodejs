@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const cloudinary = require("../utils/cloudinary");
 const User = require("../models/user.model");
 const Message = require("../models/message.model");
 
@@ -12,7 +13,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 exports.getMessages = asyncHandler(async (req, res, next) => {
   const { id: receiverId } = req.params;
-  const senderId = req.currentUser._id;
+  const senderId = req.currentUser.id;
 
   const messsages = await Message.find({
     $or: [
@@ -26,7 +27,7 @@ exports.getMessages = asyncHandler(async (req, res, next) => {
 
 exports.sendMessage = asyncHandler(async (req, res, next) => {
   const { id: receiverId } = req.params;
-  const senderId = req.currentUser._id;
+  const senderId = req.currentUser.id;
   const { message, image } = req.body;
 
   let imageUrl;

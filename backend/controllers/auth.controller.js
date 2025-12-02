@@ -4,7 +4,6 @@ const User = require("../models/user.model");
 const generateToken = require("../utils/generateJWT");
 const ApiError = require("../utils/apiError");
 const cloudinary = require("../utils/cloudinary");
-const { create } = require("lodash");
 
 exports.signup = asyncHandler(async (req, res, next) => {
   req.body.password = await bcrypt.hash(req.body.password, 12);
