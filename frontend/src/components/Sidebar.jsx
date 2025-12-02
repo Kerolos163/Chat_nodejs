@@ -7,11 +7,11 @@ import { Users } from "lucide-react";
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUserLoading } =
     useChatStore();
-  const { onlineUsers } = useAuthStore();
+  const { onlineUsers, authUser } = useAuthStore();
 
   useEffect(() => {
-    getUsers();
-  }, [getUsers]);
+    getUsers(authUser.id);
+  }, [getUsers, authUser.id]);
 
   if (isUserLoading) return <SidebarSkeleton />;
 

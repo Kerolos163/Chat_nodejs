@@ -9,11 +9,11 @@ export const useChatStore = create((set, get) => ({
   isUserLoading: false,
   isMessageLoading: false,
 
-  getUsers: async () => {
+  getUsers: async (authUserId) => {
     set({ isUserLoading: true });
     try {
       const res = await axiosInstance.get("message/users");
-      set({ users: res.data.users });
+      set({ users: res.data.users.filter((user) => user._id !== authUserId) });
       toast.success(res.data.message);
     } catch (error) {
       console.log(error.response.data.errors[0].message);

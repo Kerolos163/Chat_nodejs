@@ -32,7 +32,7 @@ const ChatComponent = () => {
           <div
             key={message._id}
             className={`chat ${
-              message.sender === authUser._id ? "chat-start" : "chat-end"
+              message.sender === authUser.id ? "chat-start" : "chat-end"
             }`}
           >
             {/* <div className="chat-bubble">{message.text}</div> */}
