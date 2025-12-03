@@ -12,7 +12,7 @@ import { useAuthStore } from "./store/useStoreAuth";
 import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const App = () => {
 
   console.log("🥅👉 ", isCheckingAuth);
   console.log(authUser);
+  console.log(onlineUsers);
 
   if (isCheckingAuth && !authUser)
     return (

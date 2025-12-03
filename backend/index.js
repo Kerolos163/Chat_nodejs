@@ -3,10 +3,10 @@ const appError = require("./middlewares/error");
 const db = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config();
+const { app, server } = require("./utils/socket");
 
 //#region App Initialization
-const app = express();
+require("dotenv").config();
 const PORT = process.env.Port || 5000;
 //#endregion
 
@@ -32,7 +32,7 @@ app.use(appError.notFoundRoute);
 app.use(appError.errorHandler);
 //#endregion
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   db();
   console.log(`Server is running on port ${PORT} ⛹️`);
 });
