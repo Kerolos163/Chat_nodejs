@@ -3,6 +3,7 @@ const http = require("http");
 const express = require("express");
 
 const userSocketMap = {}; //? used to store online users ex: {userId: socketId}
+const getSocketIdByUserId = (userId) => userSocketMap[userId]; //! get socketId by userId
 
 const app = express();
 const server = http.createServer(app);
@@ -30,4 +31,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { io, app, server };
+module.exports = { io, app, server, getSocketIdByUserId };

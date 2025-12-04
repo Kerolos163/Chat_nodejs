@@ -4,16 +4,27 @@ import { useAuthStore } from "../store/useStoreAuth";
 import Chatheader from "./Chatheader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
-import {formatMessageTime} from "../utils/timeFormat.js";
+import { formatMessageTime } from "../utils/timeFormat.js";
 
 const ChatComponent = () => {
-  const { isMessageLoading, getMessages, selectedUser, messages } =
-    useChatStore();
+  const {
+    isMessageLoading,
+    getMessages,
+    selectedUser,
+    messages,
+    subscribeToMessages,
+    unSubscribeToMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    if (selectedUser) getMessages(selectedUser._id);
-  }, [selectedUser, getMessages]);
+    if (selectedUser) {
+      getMessages(selectedUser._id);
+      subscribeToMessages();
+    }
+
+    return () => unSubscribeToMessages();
+  }, [selectedUser, getMessages, subscribeToMessages, unSubscribeToMessages]);
 
   if (isMessageLoading)
     return (

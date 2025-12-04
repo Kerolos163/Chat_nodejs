@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const cloudinary = require("../utils/cloudinary");
 const User = require("../models/user.model");
 const Message = require("../models/message.model");
+const { getSocketIdByUserId, io } = require("../utils/socket");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find(
@@ -44,7 +45,8 @@ exports.sendMessage = asyncHandler(async (req, res, next) => {
   });
   await newMessage.save();
 
-  //todo: Real time functionlity to send message
+  const receiverSocketId = await getSocketIdByUserId(receiverId);
+  if (receiverSocketId) io.to(receiverSocketId).emit("message", newMessage);
 
   res.status(200).json({ message: "Message sent successfully", newMessage });
 });
