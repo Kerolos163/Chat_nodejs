@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useStoreAuth";
 import Chatheader from "./Chatheader";
@@ -7,6 +7,7 @@ import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { formatMessageTime } from "../utils/timeFormat.js";
 
 const ChatComponent = () => {
+  const messageEndRef = useRef(null);
   const {
     isMessageLoading,
     getMessages,
@@ -25,6 +26,10 @@ const ChatComponent = () => {
 
     return () => unSubscribeToMessages();
   }, [selectedUser, getMessages, subscribeToMessages, unSubscribeToMessages]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   if (isMessageLoading)
     return (
@@ -45,6 +50,7 @@ const ChatComponent = () => {
             className={`chat ${
               message.sender === authUser.id ? "chat-start" : "chat-end"
             }`}
+            ref={messageEndRef}
           >
             {/* <div className="chat-bubble">{message.text}</div> */}
             <div className="chat-image avatar">
