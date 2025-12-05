@@ -1,5 +1,6 @@
 const express = require("express");
 const appError = require("./middlewares/error");
+const path = require("path");
 const db = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -26,6 +27,13 @@ app.use(
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/message", require("./routes/message.route"));
 //#endregion
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
 
 //#region Error Handling
 app.use(appError.notFoundRoute);
